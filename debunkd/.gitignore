@@ -1,0 +1,14 @@
+# Ignore Python & Virtual Environment files
+__pycache__/
+*.pyc
+*.pyo
+env/
+venv/
+
+# Ignore large files
+*.log
+*.csv
+*.h5
+*.pth
+*.sqlite
+.DS_Store
