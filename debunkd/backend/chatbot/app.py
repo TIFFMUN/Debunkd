@@ -1,15 +1,27 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-from helper import verify_and_correct_statement  # Import the function from helper.py
 import logging
+import os
+from helper import verify_and_correct_statement  # Import the function from helper.py
 
 # Initialize Flask app
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../frontend", static_url_path="")
 CORS(app)  # Enable CORS for all routes
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 
+# ✅ Serve Frontend (index.html as Homepage)
+@app.route("/")
+def serve_home():
+    return send_from_directory(app.static_folder, "index.html")
+
+# ✅ Serve Static Files (CSS, JS, Images, etc.)
+@app.route("/<path:filename>")
+def serve_static_files(filename):
+    return send_from_directory(app.static_folder, filename)
+
+# ✅ API Endpoint for Misinformation Verification
 @app.route("/verify", methods=["POST"])
 def verify_statement():
     data = request.json
@@ -29,4 +41,4 @@ def verify_statement():
         return jsonify({"error": "An error occurred while verifying the statement"}), 500
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5000)  # Flask runs on localhost:5000

@@ -8,9 +8,6 @@ from langchain_community.document_loaders import CSVLoader, WebBaseLoader, Merge
 import pandas as pd
 import os
 
-# GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
-# GROQ_API_KEY = os.getenv('GROQ_API_KEY')
-
 # Initialize the Fact Check Tools API service
 service = build("factchecktools", "v1alpha1", developerKey="AIzaSyC_TbIg8TAXmFgn8RkOT-cYvnRTk6ULxRQ")
 
@@ -23,7 +20,12 @@ llm = ChatGroq(
 # Load and process documents
 def load_documents():
     # Load CSV dataset
-    csv_loader = CSVLoader(file_path="./covid19_fake_dataset.csv", encoding="utf-8")
+    # csv_loader = CSVLoader(file_path="debunkd\backend\chatbot\COVID Fake News Data.csv", encoding="utf-8")
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(current_dir, "COVID Fake News Data.csv")
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"CSV file not found at: {file_path}")
+    csv_loader = CSVLoader(file_path=file_path, encoding="utf-8")
     docs1 = csv_loader.load()
 
     # Load Web Data
