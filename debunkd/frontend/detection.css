@@ -1,4 +1,7 @@
-/* General Reset */
+body {
+  background-color: #f6d4d2;
+}
+
 * {
   margin: 0;
   padding: 0;
