@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@ant-design/icons": "^5.6.1",
+    "uninstall": "^0.0.0"
+  }
+}
