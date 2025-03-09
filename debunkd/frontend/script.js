@@ -3,8 +3,13 @@ const sampleTextBtn = document.getElementById("sampleTextBtn");
 const uploadFileLabel = document.querySelector("label[for='imageUpload']");
 const imageUpload = document.getElementById("imageUpload");
 const checkButton = document.getElementById("processImage");
+const clearButton = document.getElementById("clearButton");
 
+let extractedText = ""; // Store OCR result separately
+
+// Initially hide both Check and Clear buttons
 checkButton.style.display = "none";
+clearButton.style.display = "none";
 
 function handleInputChange() {
     requestAnimationFrame(() => {
@@ -12,22 +17,42 @@ function handleInputChange() {
             sampleTextBtn.style.opacity = "0";  
             uploadFileLabel.style.opacity = "0";
             checkButton.style.display = "block";  
+            clearButton.style.display = "block";  // Show Clear button as well
         } else {
             sampleTextBtn.style.opacity = "1";  
             uploadFileLabel.style.opacity = "1";
             checkButton.style.display = "none";
+            clearButton.style.display = "none";  // Hide Clear button if no input
         }
     });
 }
 
 function insertSampleText() {
     textInput.value = "This is a sample text for misinformation detection.";
+    extractedText = textInput.value; // Store it separately
     handleInputChange();
 }
 
-async function extractTextFromImage(imageFile) {
-    textInput.value = "Extracting text from image..."; // Show progress inside input field
+// ✅ When image is uploaded, update text box without passing it to OCR
+imageUpload.addEventListener("change", async function () {
+    if (imageUpload.files.length > 0) {
+        textInput.value = "Image uploaded. Processing text...";
+        extractedText = ""; // Reset extracted text
+        handleInputChange();
 
+        // Run OCR in background
+        extractedText = await extractTextFromImage(imageUpload.files[0]);
+
+        // Only update textInput if OCR found something
+        if (extractedText) {
+            textInput.value = extractedText;
+        } else {
+            textInput.value = "No text detected in the image.";
+        }
+    }
+});
+
+async function extractTextFromImage(imageFile) {
     try {
         const { createWorker } = Tesseract;
         const worker = await createWorker();
@@ -39,10 +64,9 @@ async function extractTextFromImage(imageFile) {
         const { data: { text } } = await worker.recognize(URL.createObjectURL(imageFile));
         await worker.terminate();
 
-        return text.trim(); // Return extracted text
+        return text.trim(); // Store extracted text
     } catch (error) {
         console.error("OCR Error:", error);
-        textInput.value = "Error extracting text from image.";
         return ""; // Return empty string if OCR fails
     }
 }
@@ -52,21 +76,10 @@ async function processCheck() {
     checkButton.innerText = "Processing...";
     checkButton.disabled = true;
 
-    let textToVerify = textInput.value.trim();
-
-    // If no text is entered but an image is uploaded, extract text from image
-    if (textToVerify === "" && imageUpload.files.length > 0) {
-        textToVerify = await extractTextFromImage(imageUpload.files[0]);
-        
-        if (!textToVerify) {
-            textInput.value = "No text detected in the image.";
-            resetButton();
-            return;
-        }
-    }
+    let textToVerify = extractedText.trim() || textInput.value.trim(); // Use OCR result if available
 
     // If still no text, show error
-    if (textToVerify === "") {
+    if (textToVerify === "" && imageUpload.files.length === 0) {
         textInput.value = "Please enter text or upload an image.";
         resetButton();
         return;
@@ -103,8 +116,20 @@ function resetButton() {
     checkButton.disabled = false;
 }
 
+// Clear button function
+function clearInput() {
+    textInput.value = "";
+    extractedText = ""; // Reset stored OCR text
+    imageUpload.value = ""; // Reset file input
+    checkButton.style.display = "none"; // Hide Check button
+    clearButton.style.display = "none"; // Hide Clear button
+    sampleTextBtn.style.opacity = "1";  
+    uploadFileLabel.style.opacity = "1";
+}
+
+// Event Listeners
+clearButton.addEventListener("click", clearInput);
 textInput.addEventListener("input", handleInputChange);
 imageUpload.addEventListener("change", handleInputChange);
 sampleTextBtn.addEventListener("click", insertSampleText);
 checkButton.addEventListener("click", processCheck);
-
