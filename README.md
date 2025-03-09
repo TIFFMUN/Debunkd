@@ -8,7 +8,7 @@
 
 ## 🚀 **Demo**  
 Check out a quick demo of our prototype:  
-[![Watch the Demo](https://www.youtube.com/watch?v=Q8HLCUGpSJg)
+[![Watch the Demo](https://www.youtube.com/watch?v=Q8HLCUGpSJg)]
 
 ---
 
