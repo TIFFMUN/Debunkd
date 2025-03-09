@@ -8,14 +8,19 @@
 </head>
 <body>
     <a href="index.html" class="back-button">⬅</a>
-    <h1>Misinformation Quiz - Debunkd</h1>
-    <img id="question-image" src="" alt="Question Image">
-    <p id="question-text">Loading...</p>
-    <button onclick="checkAnswer(true)">True</button>
-    <button onclick="checkAnswer(false)">False</button>
-
+    <div class="quiz-container">
+        <div class="image-container" id="background-container">
+            <div class="question-overlay">
+                <p id="question-text"></p>
+                <div class="button-container">
+                    <button onclick="checkAnswer(true)">REAL</button>
+                    <button onclick="checkAnswer(false)">FAKE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="score-container">Score: <span id="score">0</span></div>
+    <div class="high-score-container">High Score: <span id="high-score">0</span></div>
     <script type="module" src="game.js"></script>
 </body>
 </html>
-
-
