@@ -157,7 +157,7 @@ function addInitialMessage() {
     const messageDiv = document.createElement('div');
     messageDiv.className = 'chatbot-message';
     messageDiv.innerHTML = `
-        <div class="message bot">What questions do you have regarding misinformation or deepfakes?</div>
+        <div class="message bot">Hi there, what questions do you have regarding misinformation?</div>
         <img src="images/chatbot-icon.png" alt="Chatbot" class="chatbot-icon">
     `;
     chatContainer.appendChild(messageDiv);
