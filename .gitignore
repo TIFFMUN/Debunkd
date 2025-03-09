@@ -49086,3 +49086,10 @@ env/Scripts/watchfiles.exe
 env/Scripts/websockets.exe
 env/Scripts/wsdump.exe
 env/share/man/man1/isympy.1
+node_modules/
+debunkd/backend/chatbot/chroma_teacher_db/chroma.sqlite3
+debunkd/backend/chatbot/chroma_teacher_db/caa9ef13-e453-4e3a-82f6-ead3a5b43db5/link_lists.bin
+debunkd/backend/chatbot/chroma_teacher_db/caa9ef13-e453-4e3a-82f6-ead3a5b43db5/length.bin
+debunkd/backend/chatbot/chroma_teacher_db/caa9ef13-e453-4e3a-82f6-ead3a5b43db5/index_metadata.pickle
+debunkd/backend/chatbot/chroma_teacher_db/caa9ef13-e453-4e3a-82f6-ead3a5b43db5/header.bin
+debunkd/backend/chatbot/chroma_teacher_db/caa9ef13-e453-4e3a-82f6-ead3a5b43db5/data_level0.bin
