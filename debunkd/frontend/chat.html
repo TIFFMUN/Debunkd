@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="chat.css">
 </head>
 <body>
+    <a href="chatbot.html" class="back-button">⬅</a>
     <div class="container">
         <h1 class="chatbot-title">Debunkd Chatbot</h1>
         <div class="chat-container" id="chatContainer"></div>
@@ -14,16 +15,22 @@
             <input type="text" id="userInput" class="input-field" placeholder="Enter your questions here">
             <div class="input-actions">
                 <button class="upload-btn" id="uploadBtn">+</button>
-                <button class="send-btn" onclick="sendMessage()">✈</button>
+                <button class="send-btn" onclick="sendMessage()">></button>
             </div>
         </div>
         <!-- Popup for image upload -->
-        <div class="popup" id="uploadPopup">
+        <!-- <div class="popup" id="uploadPopup">
             <div class="popup-content">
                 <span class="close-btn" id="closePopup">×</span>
                 <h2>Upload Image</h2>
                 <input type="file" id="imageInput" accept="image/*">
                 <button class="submit-btn" id="submitImage">Submit</button>
+            </div>
+        </div> -->
+        <div class="plus-popup" id="plusPopup">
+            <div class="plus-popup-content">
+                <button class="plus-option" id="sampleText">📄 Sample Text</button>
+                <button class="plus-option" id="documentUpload">📁 Document</button>
             </div>
         </div>
     </div>

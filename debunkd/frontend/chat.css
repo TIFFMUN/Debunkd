@@ -1,225 +1,317 @@
 /* Import Poppins as a fallback */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
 
 /* Load Canva Sans locally */
 @font-face {
-    font-family: 'Canva Sans';
-    src: url('../fonts/canva-sans.ttf') format('truetype'); /* Adjust path if needed */
-    font-weight: normal;
-    font-style: normal;
+  font-family: "Canva Sans";
+  src: url("../fonts/canva-sans.ttf") format("truetype"); /* Adjust path if needed */
+  font-weight: normal;
+  font-style: normal;
 }
 
 body {
-    background-color: #000629;
-    margin: 0;
-    padding: 0;
-    font-family: 'Canva Sans', 'Poppins', sans-serif; /* Canva Sans as primary */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  background-color: #000629;
+  margin: 0;
+  padding: 0;
+  font-family: "Canva Sans", "Poppins", sans-serif; /* Canva Sans as primary */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .container {
-    width: 90%;
-    margin: 0 auto;
+  width: 100%;
+  margin: 0 auto;
 }
+
+/* .chatbot-title {
+  color: white;
+  text-align: center;
+  margin-top: 5px;
+  font-size: 2.5rem;
+} */
 
 .chatbot-title {
-    color: white;
-    text-align: center;
-    margin-top: 20px;
-    font-size: 2.5rem;
+  color: white;
+  text-align: center;
+  font-size: 2.5rem;
+  position: absolute; /* Makes it fixed at the top */
+  top: 10px; /* Move it up */
+  left: 50%;
+  transform: translateX(-50%); /* Keep it centered */
+  z-index: 100; /* Ensure it's above other elements */
+  background: none; /* Remove gray background */
 }
 
+/* .chat-container {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #000629;
+  border-radius: 10px;
+  height: 60vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+} */
+
 .chat-container {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: #000629;
-    border-radius: 10px;
-    height: 60vh;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+  margin-top: 10px; /* Push chat box lower so title is separate */
+  padding: 15px;
+  background-color: #000629;
+  border-radius: 10px;
+  height: 65vh; /* Adjusted for better spacing */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .static-message {
-    position: sticky;
-    top: 0;
-    background-color: #000629;
-    z-index: 10;
+  position: sticky;
+  top: 0;
+  background-color: #000629;
+  z-index: 10;
 }
 
-.chatbot-message, .user-message {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-
+.chatbot-message,
+.user-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
 }
 
-.chatbot-icon, .user-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+.chatbot-icon,
+.user-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
 .chatbot-icon {
-    background-color: #00aaff;
-    /* Replace with actual chatbot image path if available */
+  background-color: #00aaff;
+  /* Replace with actual chatbot image path if available */
 }
 
 .user-icon {
-    background-color: #ccc;
-    /* Replace with actual user image path if available */
+  background-color: #ccc;
+  /* Replace with actual user image path if available */
 }
 
 .message {
-    padding: 20px; /* Increased from 15px */
-    border-radius: 25px; /* More rounded feel */
-    max-width: 80%; /* Increased from 70% */
-    font-size: 1.3rem; /* Larger text */
-    color: #607088;
-    background-color: white;
-    display: inline-block;
-    white-space: normal; /* Allows text wrapping */
-    overflow: visible; /* Ensures no hidden text */
-    text-overflow: clip; /* No ellipsis */
-    text-align: left;
+  padding: 20px; /* Increased from 15px */
+  border-radius: 25px; /* More rounded feel */
+  max-width: 80%; /* Increased from 70% */
+  font-size: 1rem; /* Larger text */
+  color: #607088;
+  background-color: white;
+  display: inline-block;
+  white-space: normal; /* Allows text wrapping */
+  overflow: visible; /* Ensures no hidden text */
+  text-overflow: clip; /* No ellipsis */
+  text-align: left;
 }
 
 .bot {
-    margin-left: auto;
-    text-align: left;
+  margin-left: auto;
+  text-align: left;
 }
 
 .user {
-    margin-right: auto;
-    text-align: left; /* Ensure text aligns left for user messages */
+  margin-right: auto;
+  text-align: left; /* Ensure text aligns left for user messages */
 }
 
 .options {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .option-btn {
-    background-color: #e0e0e0;
-    border: none;
-    padding: 12px 20px; /* Increased padding */
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 1.2rem; /* Larger text */
-    color: #607088;
-    width: 100%;
-    text-align: left;
+  background-color: #e0e0e0;
+  border: none;
+  padding: 12px 20px; /* Increased padding */
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1.2rem; /* Larger text */
+  color: #607088;
+  width: 100%;
+  text-align: left;
 }
 
 .option-btn:hover {
-    background-color: #d0d0d0;
+  background-color: #d0d0d0;
 }
 
 .input-container {
-    display: flex; /* Always visible */
-    align-items: center;
-    gap: 10px;
-    margin-top: 20px;
-    padding: 15px; /* Increased from 10px */
-    background-color: white;
-    border-radius: 25px; /* More rounded */
-    transition: opacity 0.3s ease;
+  position: fixed;
+  bottom: 10px; /* Keeps it at the bottom */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 25px;
+  height: 45px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .input-field {
-    flex-grow: 1;
-    border: none;
-    outline: none;
-    font-size: 1.3rem; /* Larger text */
-    color: #607088;
-    padding: 15px; /* Increased from 10px */
-    border-radius: 20px;
+  flex-grow: 1;
+  border: none;
+  outline: none;
+  font-size: 1.2rem; /* Larger text */
+  color: #607088;
+  padding: 10px; /* Increased from 10px */
+  border-radius: 30px;
 }
 
 .input-actions {
-    display: flex;
-    gap: 5px;
+  display: flex;
+  gap: 5px;
 }
 
-.upload-btn, .send-btn {
-    background-color: #007bff;
-    border: none;
-    color: white;
-    width: 50px; /* Increased from 40px */
-    height: 50px; /* Increased from 40px */
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1.5rem; /* Larger icon */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.upload-btn,
+.send-btn {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  width: 50px; /* Increased from 40px */
+  height: 50px; /* Increased from 40px */
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.5rem; /* Larger icon */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.upload-btn:hover, .send-btn:hover {
-    background-color: #0056b3;
+.upload-btn:hover,
+.send-btn:hover {
+  background-color: #0056b3;
 }
 
 /* Popup styling */
 .popup {
-    display: none; /* Hidden by default */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
+  display: none; /* Hidden by default */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
 }
 
 .popup-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 300px;
-    text-align: center;
-    position: relative;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+  text-align: center;
+  position: relative;
 }
 
 .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 20px;
-    cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
 }
 
 .popup-content h2 {
-    margin-top: 0;
-    font-size: 18px;
+  margin-top: 0;
+  font-size: 18px;
 }
 
 .popup-content input[type="file"] {
-    margin: 10px 0;
-    width: 100%;
+  margin: 10px 0;
+  width: 100%;
 }
 
 .submit-btn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  background-color: #4caf50;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .submit-btn:hover {
-    background-color: #45a049;
+  background-color: #45a049;
 }
 
 /* Ensure chat container doesn’t overlap popup */
 .chat-container {
-    position: relative;
-    z-index: 1;
+  position: relative;
+  z-index: 1;
+  /* width: 97%; */
+}
+
+.back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 40px;
+  height: 40px;
+  background-color: white;
+  color: #000629;
+  font-size: 24px;
+  text-align: center;
+  line-height: 40px;
+  border-radius: 50%;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.plus-popup {
+  display: none;
+  position: absolute;
+  bottom: 65px; /* Position above input bar */
+  right: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1000;
+}
+
+/* Popup Buttons */
+.plus-popup-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.plus-option {
+  background: #f8f9fa;
+  border: none;
+  padding: 10px 15px;
+  text-align: left;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.plus-option:hover {
+  background: #e0e0e0;
 }

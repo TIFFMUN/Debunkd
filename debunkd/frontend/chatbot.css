@@ -142,11 +142,10 @@ input[type="file"] {
   bottom: 0;
 }
 
-
 .chatbot-link-btn {
   position: absolute;
-  right: 15vw; 
-  bottom: 5vh; 
+  right: 15vw;
+  bottom: 5vh;
   background-color: white;
   color: #607088;
   padding: 10px 20px;

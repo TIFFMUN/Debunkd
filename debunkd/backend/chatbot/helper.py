@@ -192,43 +192,100 @@ def verify_and_correct_statement(statement: str, num_docs: int = 1):
     return response.content
 
 
+# def teach_deepfakes_and_misinfo(user_input: str, history: str) -> str:
+#     """
+#     Engages the user in a conversational manner to teach about deepfakes and misinformation.
+#     Uses a vector store loaded from a CSV file to provide context-aware responses.
+#     :param user_input: The user's current message.
+#     :param history: The conversation history as a string.
+#     :return: A conversational, educational response from the LLM.
+#     """
+#     docs = teacher_vectorstore.similarity_search(user_input, k=2)
+#     context = "\n\n".join([doc.page_content for doc in docs]) if docs else "No relevant data found in the knowledge base."
+
+#     prompt = ChatPromptTemplate.from_messages([
+#         ("system", """You are an expert educator on identifying deepfakes and misinformation. 
+#         Do not give random advice unless explicitly requested.
+#         Your goal is to help users learn about these topics through conversational dialogue, provide sources for claims if possible. 
+#         Use clear explanations, examples while being brief. Use the conversation history and provided context to provide context-aware responses and build on previous discussions, do not repeat things.
+
+#         Conversation History:
+#         {history}
+
+#         Context from Knowledge Base:
+#         {context}
+
+#         Current User Message:
+#         {user_input}
+#         """),
+#         ("human", "{user_input}")
+#     ])
+
+#     formatted_prompt = prompt.format(
+#         history=history if history else "No previous conversation history.",
+#         context=context,
+#         user_input=user_input
+#     )
+    
+#     try:
+#         response = llm.invoke(formatted_prompt, frequency_penalty=0.5)
+#         return response.content
+#     except Exception as e:
+#         return f"An error occurred while generating a response: {str(e)}"
+
 def teach_deepfakes_and_misinfo(user_input: str, history: str) -> str:
     """
     Engages the user in a conversational manner to teach about deepfakes and misinformation.
-    Uses a vector store loaded from a CSV file to provide context-aware responses.
+    Provides structured but concise answers with sources while maintaining conversation flow.
+    
     :param user_input: The user's current message.
     :param history: The conversation history as a string.
-    :return: A conversational, educational response from the LLM.
+    :return: A well-structured, conversational response from the LLM.
     """
-    docs = teacher_vectorstore.similarity_search(user_input, k=2)
-    context = "\n\n".join([doc.page_content for doc in docs]) if docs else "No relevant data found in the knowledge base."
+    # Retrieve only the most relevant document for faster response time
+    docs = teacher_vectorstore.similarity_search(user_input, k=1)
+    context = docs[0].page_content if docs else "No relevant data found in the knowledge base."
 
+    # Limit conversation history to last 4 exchanges to keep responses relevant
+    history_lines = history.split("\n")[-8:] if history else ["No previous conversation history."]
+    formatted_history = "\n".join(history_lines)
+
+    # Improved prompt for better flow
     prompt = ChatPromptTemplate.from_messages([
-        ("system", """You are an expert educator on identifying deepfakes and misinformation. 
-        Do not give random advice unless explicitly requested.
-        Your goal is to help users learn about these topics through conversational dialogue, provide sources for claims if possible. 
-        Use clear explanations, examples while being brief. Use the conversation history and provided context to provide context-aware responses and build on previous discussions, do not repeat things.
+        ("system", """You are an AI misinformation expert. Your job is to provide **clear, factual answers** while maintaining a smooth conversation. 
+        - **If a claim is true**, confirm it and provide a reliable source.
+        - **If a claim is false**, debunk it with a short explanation and a credible source.
+        - **If there's no clear answer**, provide an analysis and suggest ways to verify the claim.
+        - Keep responses **concise, engaging, and natural** while ensuring they remain informative.
 
-        Conversation History:
-        {history}
+        **Response Format:**
+        - **Answer in a paragraph** (not too short, not too long).
+        - **Always include at least one credible source.**
+        - **Be conversational and prepared for follow-up questions.**
 
-        Context from Knowledge Base:
+        **Recent Conversation History:**
+        {formatted_history}
+
+        **Context from Knowledge Base:**
         {context}
 
-        Current User Message:
+        **User Message:**
         {user_input}
+
+        **Your Response:**
         """),
         ("human", "{user_input}")
     ])
 
     formatted_prompt = prompt.format(
-        history=history if history else "No previous conversation history.",
+        formatted_history=formatted_history,
         context=context,
         user_input=user_input
     )
-    
+
     try:
-        response = llm.invoke(formatted_prompt, frequency_penalty=0.5)
-        return response.content
+        response = llm.invoke(formatted_prompt, frequency_penalty=0.1)  # Lower penalty for faster response
+        return response.content if hasattr(response, "content") else str(response)
+
     except Exception as e:
         return f"An error occurred while generating a response: {str(e)}"
