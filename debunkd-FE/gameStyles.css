@@ -1,0 +1,16 @@
+#pictureBox{
+    width: 50%;
+    height: 50%;
+    display: flex;
+    border-radius: 30%;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+}
+#realBtn, #fakeBtn{
+    display: inline-block;
+    margin:5px;
+}
+.container{
+    text-align: center;
+}
