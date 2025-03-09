@@ -1,14 +1,14 @@
 # **Debunkd**  
 ### **Real or Fake? Test Your Skills & AI-Powered Verification**  
 <p align="left">
-<img src="https://github.com/SiawXuan15/DLW/blob/main/VerifiAI%20Logo.png" alt="VerifiAI" width="400"/>
+<img src="debunkd.png" alt="VerifiAI" width="400"/>
 </p>
 
 ---
 
 ## 🚀 **Demo**  
 Check out a quick demo of our prototype:  
-[![Watch the Demo](https://www.youtube.com/watch?v=Q8HLCUGpSJg)
+[[Watch the Demo](https://www.youtube.com/watch?v=Q8HLCUGpSJg)]
 
 ---
 
