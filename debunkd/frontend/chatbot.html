@@ -6,7 +6,6 @@
     <title>Debunkd Misinformation Checker</title>
     <link rel="stylesheet" href="chatbot.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <!-- Reference the local tesseract.min.js -->
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
 </head>
 <body>
@@ -16,8 +15,6 @@
         <h2 class="title">Debunkd Misinformation Checker</h2>
 
         <div class="text-upload-section">
-            <!-- Text Input Field -->
-            <!-- <input type="text" id="textInput" placeholder="Enter text here or upload an image to check for misinformation" class="enter-text"/> -->
             <textarea id="textInput" class="enter-text" placeholder="Enter text here or upload an image to check for misinformation"></textarea>
 
             <div class="upload-section">
@@ -32,16 +29,14 @@
             </div>
         </div>
 
-        <!-- Check Button -->
         <button id="processImage" class="check-btn">Check</button>
         <img src="images/chatbot.png" alt="Chatbot" class="chatbot-image">
+        <a href="chat.html" class="chatbot-link-btn">Chat with our Bot</a> 
         <div id="outputDiv">
             <p id="output">Verification result will appear here...</p>
         </div>
-
     </div>
 
-    <!-- Link to External JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>
