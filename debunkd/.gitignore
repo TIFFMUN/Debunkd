@@ -12,3 +12,7 @@ venv/
 *.pth
 *.sqlite
 .DS_Store
+debunkd/backend/chatbot/chroma_teacher_db/
+debunkd/backend/chatbot/chroma_verify_db/
+backend/chatbot/chroma_verify_db/
+chatbot/chroma_teacher_db/
