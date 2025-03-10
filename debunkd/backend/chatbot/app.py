@@ -69,7 +69,14 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import logging
 import os
-from helper import verify_and_correct_statement, teach_deepfakes_and_misinfo, vectorstore, teacher_vectorstore 
+
+# Import helper functions safely
+try:
+    from helper import verify_and_correct_statement, teach_deepfakes_and_misinfo
+except ImportError as e:
+    logging.error(f"Error importing helper functions: {e}")
+    verify_and_correct_statement = None
+    teach_deepfakes_and_misinfo = None
 
 # Initialize Flask app
 app = Flask(__name__, static_folder="../frontend", static_url_path="")
@@ -83,20 +90,24 @@ conversations = {}
 
 @app.route("/")
 def serve_home():
+    """Serve the frontend index.html"""
     return send_from_directory(app.static_folder, "index.html")
 
 @app.route("/<path:filename>")
 def serve_static_files(filename):
+    """Serve other frontend static files"""
     return send_from_directory(app.static_folder, filename)
 
 @app.route("/verify", methods=["POST"])
 def verify_statement():
+    """Handles fact verification"""
+    if verify_and_correct_statement is None:
+        logging.error("verify_and_correct_statement function not found.")
+        return jsonify({"error": "Server misconfiguration"}), 500
+
     try:
-        if request.content_type == "application/json":
-            data = request.get_json()
-            statement = data.get("text", "").strip()
-        else:
-            statement = request.form.get("text", "").strip()
+        data = request.get_json() if request.content_type == "application/json" else request.form
+        statement = data.get("text", "").strip()
 
         if not statement:
             logging.error("No statement provided in the request")
@@ -111,6 +122,11 @@ def verify_statement():
 
 @app.route("/chat", methods=["POST"])
 def chat():
+    """Handles chatbot messages"""
+    if teach_deepfakes_and_misinfo is None:
+        logging.error("teach_deepfakes_and_misinfo function not found.")
+        return jsonify({"error": "Server misconfiguration"}), 500
+
     try:
         data = request.get_json()
         if not data or "message" not in data:
@@ -136,8 +152,12 @@ def chat():
         logging.error(f"Error processing chat message: {e}")
         return jsonify({"error": "An error occurred while processing the chat message"}), 500
 
+# Ensure Render detects Flask and binds to the correct port
 if __name__ == "__main__":
-    # Render assigns a port dynamically, so we must use it
-    port = int(os.environ.get("PORT", 10000))  # Default to 10000 if not set
-    logging.info(f"Starting server on port {port}...")
-    app.run(host="0.0.0.0", port=port, debug=True)
+    port = int(os.environ.get("PORT", 10000))  # Get port dynamically from Render
+    print(f"🚀 Starting Flask app on http://0.0.0.0:{port}/")  # Debugging info
+
+    try:
+        app.run(host="0.0.0.0", port=port, debug=False)  # Ensure it's not in debug mode on Render
+    except Exception as e:
+        print(f"🔥 ERROR: Flask failed to start on port {port}: {e}")
