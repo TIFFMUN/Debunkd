@@ -90,8 +90,8 @@ conversations = {}
 
 @app.route("/")
 def serve_home():
-    """Serve the frontend index.html"""
-    return send_from_directory(app.static_folder, "index.html")
+    """Serve a blank screen"""
+    return "<html><body></body></html>"
 
 @app.route("/<path:filename>")
 def serve_static_files(filename):
