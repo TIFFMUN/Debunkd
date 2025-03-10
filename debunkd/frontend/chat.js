@@ -253,7 +253,7 @@ function sendMessage() {
         addUserMessage(messageText);
         userInput.value = '';
         addProcessingMessage();
-        fetch('https://debunkd.onrender.com/chat', {  // ✅ Updated Render backend URL
+        fetch('https://debunkd-3.onrender.com/verify', {  // ✅ Updated Render backend URL
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
