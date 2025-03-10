@@ -68,11 +68,3 @@ Users can verify an image in two ways:
 | **Database**     | Supabase (stores real/fake image data), ChromaDB (Vector Database), Google Fact Checker API |
 | **Deployment**   | Render (backend), Vercel (frontend) |
 
----
-
-## **📌 Installation & Setup**  
-
-### **1️⃣ Clone the repository**  
-```sh
-git clone https://github.com/tiffmun/debunkd.git
-cd debunkd
