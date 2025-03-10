@@ -182,7 +182,11 @@ except ImportError as e:
 app = Flask(__name__, static_folder="../frontend", static_url_path="")
 
 # ✅ Allow only Vercel frontend to access the API
-CORS(app, resources={r"/*": {"origins": "https://debunkd-six.vercel.app"}})
+CORS(
+    app,
+    resources={r"/*": {"origins": "https://debunkd-six.vercel.app"}},
+    supports_credentials=True
+)
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s [%(levelname)s]: %(message)s")
@@ -200,29 +204,43 @@ def serve_static_files(filename):
     """Serve other frontend static files"""
     return send_from_directory(app.static_folder, filename)
 
-@app.route("/verify", methods=["POST"])
-def verify_statement():
-    """Handles fact verification"""
-    if verify_and_correct_statement is None:
-        logging.error("verify_and_correct_statement function not found.")
+@app.route("/chat", methods=["POST"])
+def chat():
+    """Handles chatbot messages"""
+    if teach_deepfakes_and_misinfo is None:
+        logging.error("teach_deepfakes_and_misinfo function not found.")
         return jsonify({"error": "Server misconfiguration"}), 500
 
     try:
-        data = request.get_json() if request.content_type == "application/json" else request.form
-        statement = data.get("text", "").strip()
+        data = request.get_json()
+        if not data or "message" not in data:
+            logging.error("No message provided in the request")
+            return jsonify({"error": "No message provided"}), 400
 
-        if not statement:
-            logging.error("No statement provided in the request")
-            return jsonify({"error": "No statement provided"}), 400
+        message = data["message"].strip()
+        session_id = data.get("session_id", "default")
 
-        result = verify_and_correct_statement(statement)
-        response = jsonify({"result": result})
-        response.headers.add("Access-Control-Allow-Origin", "https://debunkd-six.vercel.app")  # ✅ Allow Frontend
-        return response
+        if session_id not in conversations:
+            conversations[session_id] = []
+
+        conversations[session_id].append({"role": "user", "content": message})
+        history_context = "\n".join(
+            [f"{msg['role']}: {msg['content']}" for msg in conversations[session_id]]
+        )
+        response = teach_deepfakes_and_misinfo(message, history_context)
+        conversations[session_id].append({"role": "assistant", "content": response})
+
+        api_response = jsonify({"response": response, "history": conversations[session_id]})
+        
+        # ✅ Explicitly Allow CORS
+        api_response.headers.add("Access-Control-Allow-Origin", "https://debunkd-six.vercel.app")
+        api_response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+        api_response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
+        return api_response
 
     except Exception as e:
-        logging.error(f"Error verifying statement: {e}")
-        return jsonify({"error": "An error occurred while verifying the statement"}), 500
+        logging.error(f"Error processing chat message: {e}")
+        return jsonify({"error": "An error occurred while processing the chat message"}), 500
 
 @app.route("/chat", methods=["POST"])
 def chat():
@@ -260,10 +278,12 @@ def chat():
 
 # Ensure Render detects Flask and binds to the correct port
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))  # Get port dynamically from Render
-    print(f"🚀 Starting Flask app on http://0.0.0.0:{port}/")  # Debugging info
+    port = int(os.environ.get("PORT", 10000))  # Get Render port
+    print(f"🚀 Starting Flask app on http://0.0.0.0:{port}/")
 
     try:
-        app.run(host="0.0.0.0", port=port, debug=False)  # Ensure it's not in debug mode on Render
+        # ✅ Use production server instead of Flask's development server
+        from waitress import serve  # Production WSGI server
+        serve(app, host="0.0.0.0", port=port)
     except Exception as e:
         print(f"🔥 ERROR: Flask failed to start on port {port}: {e}")
