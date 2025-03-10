@@ -148,7 +148,7 @@ let extractedText = ""; // Store OCR result separately
 checkButton.style.display = "none";
 clearButton.style.display = "none";
 
-// ✅ Backend URL (Use Render in production)
+// ✅ Backend URL (Render for production)
 const BACKEND_URL = "https://debunkd-3.onrender.com/verify";
 
 function handleInputChange() {
@@ -173,19 +173,21 @@ function insertSampleText() {
     handleInputChange();
 }
 
-// ✅ When image is uploaded, update text box without passing it to OCR
+// ✅ Handle Image Upload & Extract Text (OCR)
 imageUpload.addEventListener("change", async function () {
     if (imageUpload.files.length > 0) {
         textInput.value = "Image uploaded. Processing text...";
-        extractedText = ""; 
+        extractedText = ""; // Reset extracted text
         handleInputChange();
 
         extractedText = await extractTextFromImage(imageUpload.files[0]);
 
         if (extractedText) {
             textInput.value = extractedText;
+            checkButton.style.display = "block"; // Show Check button only if text is detected
         } else {
             textInput.value = "No text detected in the image.";
+            checkButton.style.display = "none"; // Hide Check button if no text detected
         }
     }
 });
@@ -202,10 +204,10 @@ async function extractTextFromImage(imageFile) {
         const { data: { text } } = await worker.recognize(URL.createObjectURL(imageFile));
         await worker.terminate();
 
-        return text.trim(); 
+        return text.trim(); // Store extracted text
     } catch (error) {
         console.error("OCR Error:", error);
-        return ""; 
+        return ""; // Return empty string if OCR fails
     }
 }
 
@@ -222,12 +224,13 @@ async function processCheck() {
     }
 
     try {
-        let formData = new FormData();
-        formData.append("text", textToVerify);
-
-        const response = await fetch(`${BACKEND_URL}`, {  // ✅ Uses Render backend
+        const response = await fetch(`${BACKEND_URL}`, {
             method: "POST",
-            body: formData
+            headers: {
+                "Content-Type": "application/json", // Send as JSON
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({ text: textToVerify })
         });
 
         const data = await response.json();

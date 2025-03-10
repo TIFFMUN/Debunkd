@@ -80,7 +80,9 @@ except ImportError as e:
 
 # Initialize Flask app
 app = Flask(__name__, static_folder="../frontend", static_url_path="")
-CORS(app)
+# CORS(app)
+CORS(app, resources={r"/*": {"origins": ["https://debunkd-six.vercel.app"]}})
+
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s [%(levelname)s]: %(message)s")
